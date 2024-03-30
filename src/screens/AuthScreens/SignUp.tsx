@@ -20,6 +20,7 @@ import { userLogin } from '../../store/userSlice';
 import { userDetails } from '../../store/userDetailsSlice';
 import colors from '../../utils/colorPallete';
 import { isValidPassword, validateEmail } from '../../utils/regexCheck';
+import { SendOtp } from '../../network/sendOTPAPI';
 
 type BorderTypes = 'Danger' | 'Auth' | 'Normal';
 
@@ -96,6 +97,9 @@ const SignUp = () => {
       });
 
       if (response.status) {
+        console.log('inside if email', email);
+        const otpResponse = await SendOtp({ email });
+        console.log('\nOTP Response: ', otpResponse);
         setLocalItem(Constants.IS_LOGGED_IN, 'true');
         dispatch(
           userDetails({
