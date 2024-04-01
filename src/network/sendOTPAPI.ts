@@ -1,8 +1,8 @@
-import axios from 'axios';
-import api, { AxiosError } from 'axios';
+import axios,{AxiosError} from 'axios';
+import api from './api';
 
 interface SendOtpProps {
-  email: string;
+    user_email: string;
 }
 
 interface SendOtpResponse {
@@ -11,12 +11,12 @@ interface SendOtpResponse {
 }
 
 export async function SendOtp({
-  email,
+    user_email,
 }: SendOtpProps): Promise<SendOtpResponse> {
-  const sendParams = { user_email: email };
+  const sendParams = { user_email: user_email };
   try {
     console.log('Reached OTP Hook');
-    console.log('send to api email', email);
+    console.log('send to api email', user_email);
     const response = await api.post('/sendOTP', sendParams);
     console.log('response is', response);
 

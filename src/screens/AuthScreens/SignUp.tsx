@@ -98,7 +98,7 @@ const SignUp = () => {
 
       if (response.status) {
         console.log('inside if email', email);
-        const otpResponse = await SendOtp({ email });
+        const otpResponse = await SendOtp({ user_email:email ,});
         console.log('\nOTP Response: ', otpResponse);
         setLocalItem(Constants.IS_LOGGED_IN, 'true');
         dispatch(
@@ -155,10 +155,11 @@ const SignUp = () => {
             hidden={false}
             header="Email"
             value={email}
-            setter={(val) => {
-              setEmail(val);
-              setEmailBorder('Normal');
-            }}
+            // setter={(val) => {
+            //   setEmail(val);
+            //   setEmailBorder('Normal');
+            // }}
+            setter={setEmail}
             borderType={emailBorder}
             placeholder="Enter Email"
           />
