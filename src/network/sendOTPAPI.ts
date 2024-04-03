@@ -6,8 +6,10 @@ interface SendOtpProps {
 }
 
 interface SendOtpResponse {
+  [x: string]: any;
   statusCode: string;
   sendOtpResp: string;
+  otp?: string;
 }
 
 export async function SendOtp({
@@ -21,9 +23,12 @@ export async function SendOtp({
     console.log('response is', response);
 
     if (response.status === 200) {
+      const responseData = response.data;
+      console.log('response data',responseData);
       return {
         statusCode: '200',
         sendOtpResp: 'OTP sent successfully',
+        otp:responseData.data??'',
       };
     } else {
       throw new Error('Failed to send OTP');

@@ -21,10 +21,14 @@ import { userDetails } from '../../store/userDetailsSlice';
 import colors from '../../utils/colorPallete';
 import { isValidPassword, validateEmail } from '../../utils/regexCheck';
 import { SendOtp } from '../../network/sendOTPAPI';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import OtpScreen from '../AppScreens/OtpScreen';
 
 type BorderTypes = 'Danger' | 'Auth' | 'Normal';
+type SignUpNavigationProp = NavigationProp<Record<string, object>, string, any, any, any>;
 
-const SignUp = () => {
+const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
+  // const navigation = useNavigation();
   const dispatch = useDispatch();
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
@@ -37,7 +41,7 @@ const SignUp = () => {
     useState<BorderTypes>('Normal');
   const [loading, setLoading] = useState(false);
 
-  const SignUpMain = async () => {
+  const otpMain = async () => {
     if (
       email === '' ||
       password === '' ||
@@ -90,46 +94,59 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const response = await SignUpUser({
-        signUpUsername: fullname,
-        signUpPassword: password,
-        signUpEmail: email,
+      // navigation.navigate('OtpScreen');
+      navigation.navigate({
+        name: 'OtpScreen',
+        params: {}, 
       });
 
-      if (response.status) {
-        console.log('inside if email', email);
-        const otpResponse = await SendOtp({ user_email:email ,});
-        console.log('\nOTP Response: ', otpResponse);
-        setLocalItem(Constants.IS_LOGGED_IN, 'true');
-        dispatch(
-          userDetails({
-            token: response.data?.token ?? '',
-            user_id: response.data?.user_id ?? '',
-          }),
-        );
-        setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
-        setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
-        dispatch(userLogin(true));
-        dispatch(
-          userDetails({
-            token: response.data?.token ?? '',
-            user_id: response.data?.user_id ?? '',
-          }),
-        );
-      } else {
-        const message = response.message || 'Unknown error occurred';
-        ToastAndroid.showWithGravity(
-          message,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
-      }
+      const otpResponse = await SendOtp({ user_email:email ,});
+      let receivedOtp = otpResponse.otp?.toString();
+      console.log('\nOTP Response: ', otpResponse);
+      console.log(receivedOtp);
+      console.log('otpresponse',otpResponse.otp)
+
+
+      // const response = await SignUpUser({
+      //   signUpUsername: fullname,
+      //   signUpPassword: password,
+      //   signUpEmail: email,
+      // });
+
+      // if (response.status) {
+      //   console.log('inside if email', email);
+      //   // const otpResponse = await SendOtp({ user_email:email ,});
+      //   // console.log('\nOTP Response: ', otpResponse);
+      //   setLocalItem(Constants.IS_LOGGED_IN, 'true');
+      //   dispatch(
+      //     userDetails({
+      //       token: response.data?.token ?? '',
+      //       user_id: response.data?.user_id ?? '',
+      //     }),
+      //   );
+      //   setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
+      //   setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
+      //   dispatch(userLogin(true));
+      //   dispatch(
+      //     userDetails({
+      //       token: response.data?.token ?? '',
+      //       user_id: response.data?.user_id ?? '',
+      //     }),
+      //   );
+      // } else {
+      //   const message = response.message || 'Unknown error occurred';
+      //   ToastAndroid.showWithGravity(
+      //     message,
+      //     ToastAndroid.SHORT,
+      //     ToastAndroid.CENTER,
+      //   );
+      // }
     } catch (error) {
-      ToastAndroid.showWithGravity(
-        'Error occurred during signup',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
+      // ToastAndroid.showWithGravity(
+      //   'Error occurred during signup',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.CENTER,
+      // );
     } finally {
       setLoading(false);
     }
@@ -155,10 +172,6 @@ const SignUp = () => {
             hidden={false}
             header="Email"
             value={email}
-            // setter={(val) => {
-            //   setEmail(val);
-            //   setEmailBorder('Normal');
-            // }}
             setter={setEmail}
             borderType={emailBorder}
             placeholder="Enter Email"
@@ -187,7 +200,8 @@ const SignUp = () => {
           />
           {!loading ? (
             <View style={styles.buttonContainer}>
-              <ButtonComponent onPressing={SignUpMain} title="Sign Up" />
+              {/* <ButtonComponent onPressing={SignUpMain} title="Sign Up" /> */}
+              <ButtonComponent onPressing={otpMain} title="Sign Up" />
             </View>
           ) : (
             <ActivityIndicator
