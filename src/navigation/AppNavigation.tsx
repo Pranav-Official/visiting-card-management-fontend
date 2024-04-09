@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import HomeScreen from '../screens/AppScreens/HomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,6 +20,9 @@ import SharedContactsScreen from '../screens/AppScreens/SharedContactsScreen';
 import ViewSharedContactsScreen from '../screens/AppScreens/ViewSharedContactsScreen';
 import ChangePassword from '../screens/AuthScreens/ChangePassword';
 import AddProfileDetailsScreen from '../screens/AppScreens/AddProfileDetailsScreen';
+import "../i18n/i18n"; 
+import { useTranslation } from 'react-i18next';
+import SettingsScreen from '../screens/AppScreens/SettingsScreen';
 const StackNav = createNativeStackNavigator();
 const HomeStackNavigation = () => {
   return (
@@ -39,6 +41,7 @@ const HomeStackNavigation = () => {
 
 const BottomBarNavigation = createBottomTabNavigator();
 const HomeBottomBarNavigation = () => {
+  const { t } = useTranslation();
   return (
     <BottomBarNavigation.Navigator
       screenOptions={{
@@ -62,7 +65,7 @@ const HomeBottomBarNavigation = () => {
       }}
     >
       <BottomBarNavigation.Screen
-        name="Contacts"
+        name={t("Contacts")}
         component={ContactsPage}
         options={{
           tabBarIcon: () => (
@@ -79,7 +82,7 @@ const HomeBottomBarNavigation = () => {
         }}
       />
       <BottomBarNavigation.Screen
-        name="Profile"
+        name={t("Profile")}
         component={ProfileScreen}
         options={{
           tabBarIcon: () => (
@@ -111,6 +114,7 @@ const CardStackNavigation = () => {
       <StackNav.Screen name="CardListScreen" component={CardListScreen} />
       <StackNav.Screen name="CardDetailsScreen" component={CardDetailsScreen} />
       <StackNav.Screen name="EditCardScreen" component={EditCardScreen} />
+      <StackNav.Screen name="SettingsScreen" component={SettingsScreen} />
       <StackNav.Screen
         name="CardOverwriteScreen"
         component={CardOverwriteScreen}

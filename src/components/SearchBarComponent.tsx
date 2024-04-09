@@ -2,6 +2,7 @@ import React from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import colors from '../utils/colorPallete';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   editable?: boolean;
@@ -15,12 +16,12 @@ const SearchBarComponent = (props: Props) => {
       props.setter(value);
     }
   };
-
+  const { t } = useTranslation();
   return (
     <View style={styles.searchContainer}>
       <TextInput
         editable={props.editable}
-        placeholder="Search Contact"
+        placeholder={t("Search")}
         style={styles.searchBarView}
         value={props.value}
         onChangeText={onChangeText}

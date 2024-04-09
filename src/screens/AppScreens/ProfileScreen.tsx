@@ -23,6 +23,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import ProfileShimmer from '../../components/Shimmers/ProfileShimmer';
+import TopMenuButton from '../../components/MenuButton';
 
 type UserData = {
   email: string;
@@ -106,7 +107,10 @@ const ProfileScreen = () => {
       jwtToken: Constants.USER_JWT,
     });
   };
-
+  const navigateToSettingsPage=()=>{
+    navigation.navigate('CardStack', {
+      screen: 'SettingsScreen',})
+  }
   const navigateToAddProfileDetails = () => {
     navigation.navigate('CardStack', {
       screen: 'AddProfileDetailsScreen',
@@ -124,7 +128,17 @@ const ProfileScreen = () => {
     <ScrollView
       keyboardShouldPersistTaps="handled"
       style={styles.profileMainContainer}
-    >
+    ><View style={styles.topLayer}>
+      <TopMenuButton
+    options={[
+      {
+        label: 'Go To Settings',
+        onSelect:navigateToSettingsPage,
+      },
+    ]}
+  />
+    </View>
+      
       <View style={styles.profileContainer}>
         <View style={styles.profileDetailsContainer}>
           <View style={styles.profileImageContainer}>
@@ -243,6 +257,9 @@ const ProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  topLayer:{
+    alignItems:'flex-end'
+  },
   profileMainContainer: {
     backgroundColor: colors['secondary-light'],
     height: '100%',

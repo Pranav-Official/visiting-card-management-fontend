@@ -30,6 +30,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useDispatch, useSelector } from 'react-redux';
 import { setCards } from '../../store/pendingCardsSlice';
 import { RootState } from '../../store';
+import { useTranslation } from 'react-i18next';
 
 type Contact = {
   card_id: string;
@@ -64,7 +65,7 @@ const ContactsPage = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const [contactList, setContactList] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const { t } = useTranslation();
   const [pendingCardList, setPendingCardList] = React.useState<UserData[]>();
 
   const [modalVisibility, setModalVisibility] = React.useState(false);
@@ -220,7 +221,7 @@ const ContactsPage = () => {
   return (
     <SafeAreaView style={styles.SafeAreaView}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Contacts</Text>
+        <Text style={styles.headerTitle}>{t("Contacts")}</Text>
       </View>
       <TouchableOpacity onPress={goToSearchScreen}>
         <SearchBarComponent editable={false} />

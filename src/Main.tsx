@@ -8,6 +8,7 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 import SplashScreen from './screens/Splash_Screen';
 import AuthBasedNavigation from './navigation';
 import { RootState } from './store';
+import { changeLanguage } from 'i18next';
 
 const Main = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +25,8 @@ const Main = () => {
     (async () => {
       const isLogin = await getLocalItem(Constants.IS_LOGGED_IN);
       // console.log('isLogin', isLogin);
-
+      const appLang = (await getLocalItem('lang')) ?? 'en';
+      changeLanguage(appLang);
       if (isLogin === 'true') {
         dispatch(userLogin(true));
       } else {
