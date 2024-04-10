@@ -25,6 +25,7 @@ import { userLogin } from '../../store/userSlice';
 import { userDetails } from '../../store/userDetailsSlice';
 import colors from '../../utils/colorPallete';
 import { validateEmail } from '../../utils/regexCheck';
+import { useTranslation } from 'react-i18next';
 
 type response = {
   status: boolean;
@@ -140,24 +141,24 @@ const Login = () => {
       setPasswordBorder('Normal');
     }
   }, [email, password]);
-
+  const { t } = useTranslation();
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <MainLogoComponent />
       <View style={styles.midSection}>
         <InputComponent
           hidden={false}
-          header="Email"
+          header={t("Email")}
           value={email}
           setter={(val) => {
             setInputChanged(true);
             setEmail(val);
           }}
           borderType={emailBorder}
-          placeholder="Enter Email"
+          placeholder={t("Enter Email")}
         />
         <InputComponent
-          header="Password"
+          header={t("Password")}
           hidden={true}
           value={password}
           setter={(val) => {
@@ -165,13 +166,13 @@ const Login = () => {
             setPassword(val);
           }}
           borderType={passwordBorder}
-          placeholder="Enter Password"
+          placeholder={t("Enter Password")}
         />
         <View style={styles.buttonContainer}>
           {!loading ? (
             <PrimaryButtonComponent
               onPressing={() => LoginMain()}
-              title="Log In"
+              title={t("Login")}
             />
           ) : (
             <PrimaryButtonComponent title="">
@@ -187,8 +188,8 @@ const Login = () => {
         </TouchableOpacity> */}
       </View>
       <BottomDialougeTouchable
-        label="Don't have an account?"
-        mainText="Sign Up"
+        label={t("Don't have an account?")}
+        mainText={t("Sign Up")}
         navigateTo="SignUp"
       />
     </SafeAreaView>
