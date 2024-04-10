@@ -4,18 +4,25 @@ import {
   TextInput,
   StyleSheet,
   TextInputKeyPressEventData,
+  ToastAndroid,
   Alert,
 } from 'react-native';
 import PrimaryButtonComponent from '../../components/PrimaryButtonComponent';
 import MainLogoComponent from '../../components/MainLogoComponent';
+import { SignUpUser } from '../../network/AuthenticationAPI';
+import { setLocalItem } from '../../utils/Utils';
+import Constants from '../../utils/Constants';
+import { userLogin } from '../../store/userSlice';
+import { userDetails } from '../../store/userDetailsSlice';
+import { useDispatch } from 'react-redux';
 
-const OtpScreen = () => {
+const OtpScreen = ({ route }: any) => {
   // Refs for each TextInput field
+  const dispatch = useDispatch();
   const inputRefs = useRef<(TextInput | null)[]>([]);
   const [otpValues, setOTPValues] = useState<string[]>(Array(6).fill(''));
 
   // Function to focus on the next TextInput field
-
   const focusNextInput = (index: number) => {
     if (index < inputRefs.current.length - 1 && inputRefs.current[index + 1]) {
       inputRefs.current[index + 1]?.focus();
@@ -23,7 +30,6 @@ const OtpScreen = () => {
   };
 
   // Function to focus on the previous TextInput field
-
   const focusPreviousInput = (index: number) => {
     if (index > 0 && inputRefs.current[index - 1]) {
       inputRefs.current[index - 1]?.focus();
@@ -57,12 +63,41 @@ const OtpScreen = () => {
       focusNextInput(index);
     }
   };
-
-  const handleGetOTP = () => {
+  //otp verification
+  const handleGetOTP = async () => {
     const enteredOTP = otpValues.join('');
     setOTPValues(Array(6).fill(''));
     inputRefs.current[0]?.focus();
-    Alert.alert('OTP', enteredOTP);
+    if (enteredOTP === route.params.receivedOtp) {
+      const response = await SignUpUser(route.params.userDetails);
+      if (response.status) {
+        setLocalItem(Constants.IS_LOGGED_IN, 'true');
+        dispatch(
+          userDetails({
+            token: response.data?.token ?? '',
+            user_id: response.data?.user_id ?? '',
+          }),
+        );
+        setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
+        setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
+        dispatch(userLogin(true));
+        dispatch(
+          userDetails({
+            token: response.data?.token ?? '',
+            user_id: response.data?.user_id ?? '',
+          }),
+        );
+      } else {
+        const message = response.message || 'Unknown error occurred';
+        ToastAndroid.showWithGravity(
+          message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      }
+    } else {
+      Alert.alert('Invalid OTP');
+    }
   };
 
   return (
@@ -71,7 +106,6 @@ const OtpScreen = () => {
         <MainLogoComponent />
       </View>
       <View style={styles.otp}>
-        {/* Map over each TextInput with respective ref */}
         {otpValues.map((value, index) => (
           <TextInput
             key={index}
@@ -88,7 +122,7 @@ const OtpScreen = () => {
       <PrimaryButtonComponent
         title="VERIFY"
         onPressing={() => {
-          handleGetOTP(); // Call the function to verify otp
+          handleGetOTP();
         }}
       />
     </View>

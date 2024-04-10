@@ -12,24 +12,23 @@ import ButtonComponent from '../../components/PrimaryButtonComponent';
 import InputComponent from '../../components/InputComponent';
 import MainLogoComponent from '../../components/MainLogoComponent';
 import BottomDialougeTouchable from '../../components/BottomDialougeTouchable';
-import { SignUpUser } from '../../network/AuthenticationAPI';
-import { setLocalItem } from '../../utils/Utils';
-import Constants from '../../utils/Constants';
-import { useDispatch } from 'react-redux';
-import { userLogin } from '../../store/userSlice';
-import { userDetails } from '../../store/userDetailsSlice';
 import colors from '../../utils/colorPallete';
 import { isValidPassword, validateEmail } from '../../utils/regexCheck';
 import { SendOtp } from '../../network/sendOTPAPI';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import OtpScreen from '../AppScreens/OtpScreen';
+import { NavigationProp } from '@react-navigation/native';
 
 type BorderTypes = 'Danger' | 'Auth' | 'Normal';
-type SignUpNavigationProp = NavigationProp<Record<string, object>, string, any, any, any>;
+type SignUpNavigationProp = NavigationProp<
+  Record<string, object>,
+  string,
+  any,
+  any,
+  any
+>;
 
 const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
   // const navigation = useNavigation();
-  const dispatch = useDispatch();
+
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -94,59 +93,25 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
     setLoading(true);
 
     try {
-      // navigation.navigate('OtpScreen');
+      const otpResponse = await SendOtp({ user_email: email });
+      const receivedOtp = otpResponse.otp?.toString();
       navigation.navigate({
         name: 'OtpScreen',
-        params: {}, 
+        params: {
+          receivedOtp,
+          userDetails: {
+            signUpUsername: fullname,
+            signUpPassword: password,
+            signUpEmail: email,
+          },
+        },
       });
-
-      const otpResponse = await SendOtp({ user_email:email ,});
-      let receivedOtp = otpResponse.otp?.toString();
-      console.log('\nOTP Response: ', otpResponse);
-      console.log(receivedOtp);
-      console.log('otpresponse',otpResponse.otp)
-
-
-      // const response = await SignUpUser({
-      //   signUpUsername: fullname,
-      //   signUpPassword: password,
-      //   signUpEmail: email,
-      // });
-
-      // if (response.status) {
-      //   console.log('inside if email', email);
-      //   // const otpResponse = await SendOtp({ user_email:email ,});
-      //   // console.log('\nOTP Response: ', otpResponse);
-      //   setLocalItem(Constants.IS_LOGGED_IN, 'true');
-      //   dispatch(
-      //     userDetails({
-      //       token: response.data?.token ?? '',
-      //       user_id: response.data?.user_id ?? '',
-      //     }),
-      //   );
-      //   setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
-      //   setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
-      //   dispatch(userLogin(true));
-      //   dispatch(
-      //     userDetails({
-      //       token: response.data?.token ?? '',
-      //       user_id: response.data?.user_id ?? '',
-      //     }),
-      //   );
-      // } else {
-      //   const message = response.message || 'Unknown error occurred';
-      //   ToastAndroid.showWithGravity(
-      //     message,
-      //     ToastAndroid.SHORT,
-      //     ToastAndroid.CENTER,
-      //   );
-      // }
     } catch (error) {
-      // ToastAndroid.showWithGravity(
-      //   'Error occurred during signup',
-      //   ToastAndroid.SHORT,
-      //   ToastAndroid.CENTER,
-      // );
+      ToastAndroid.showWithGravity(
+        'Error occurred during signup',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
     } finally {
       setLoading(false);
     }
@@ -200,7 +165,6 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
           />
           {!loading ? (
             <View style={styles.buttonContainer}>
-              {/* <ButtonComponent onPressing={SignUpMain} title="Sign Up" /> */}
               <ButtonComponent onPressing={otpMain} title="Sign Up" />
             </View>
           ) : (
