@@ -10,14 +10,28 @@ const resources = {
     translation: {
       "Contacts": "Contacts",
       "Profile":"Profile",
-      "Search" : "Search Contacts"
+      "Search" : "Search Contacts",
+      "Logout":"Logout",
+      "Change Password":"Change Password",
+      "View Shared Contacts":"View Shared Contacts",
+      "Total Contacts":"Total Contacts",
+      "Add Phone Number":"Add Phone Number",
+      "Add Job Title":"Add Job Title",
+      "Add Company Name":"Add Company Name"
     }
   },
   ja: {
     translation: {
       "Contacts": "コンタック",
       "Profile":"プロフィール",
-      "Search":"連絡先の検索"
+      "Search":"連絡先の検索",
+      "Logout":"ログアウト",
+      "Change Password":"パスワードを変更する",
+      "View Shared Contacts":"共有連絡先を表示する",
+      "Total Contacts":"連絡先の総数",
+      "Add Phone Number":"電話番号を追加",
+      "Add Job Title":"役職を追加",
+      "Add Company Name":"会社名を追加"
     }
   }
 };

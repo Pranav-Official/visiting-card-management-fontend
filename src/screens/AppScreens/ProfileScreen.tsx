@@ -24,6 +24,7 @@ import {
 } from '@react-navigation/native';
 import ProfileShimmer from '../../components/Shimmers/ProfileShimmer';
 import TopMenuButton from '../../components/MenuButton';
+import { useTranslation } from 'react-i18next';
 
 type UserData = {
   email: string;
@@ -123,7 +124,7 @@ const ProfileScreen = () => {
       },
     });
   };
-
+  const { t } = useTranslation();
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
@@ -172,7 +173,7 @@ const ProfileScreen = () => {
                     onPress={navigateToAddProfileDetails}
                   >
                     <Phone color={'primary-text'} style={styles.icons} />
-                    <Text style={styles.phoneText}>Add Phone Number</Text>
+                    <Text style={styles.phoneText}>{t('Add Phone Number')}</Text>
                   </TouchableOpacity>
                 ) : (
                   <View style={styles.contactInfo}>
@@ -190,7 +191,7 @@ const ProfileScreen = () => {
                     onPress={navigateToAddProfileDetails}
                   >
                     <Person color={'primary-text'} style={styles.icons} />
-                    <Text style={styles.phoneText}>Add Job Title</Text>
+                    <Text style={styles.phoneText}>{t('Add Job Title')}</Text>
                   </TouchableOpacity>
                 ) : (
                   <View style={styles.contactInfo}>
@@ -208,7 +209,7 @@ const ProfileScreen = () => {
                     onPress={navigateToAddProfileDetails}
                   >
                     <Company color={'primary-text'} style={styles.icons} />
-                    <Text style={styles.phoneText}>Add Company Name</Text>
+                    <Text style={styles.phoneText}>{t('Add Company Name')}</Text>
                   </TouchableOpacity>
                 ) : (
                   <View style={styles.contactInfo}>
@@ -227,25 +228,25 @@ const ProfileScreen = () => {
           <Text style={styles.number}>
             {profileResponse?.userData.totalContacts}
           </Text>
-          <Text style={styles.numberText}>Total Contacts</Text>
+          <Text style={styles.numberText}>{t('Total Contacts')}</Text>
         </View>
 
         <View style={styles.buttonsContainer}>
           <PrimaryButtonComponent
-            title={'View Shared Contacts'}
+            title={t('View Shared Contacts')}
             backgroundColor={colors['accent-white']}
             isHighlighted={true}
             onPressing={() => navigateSharedContactsScreen()}
           />
           <PrimaryButtonComponent
-            title={'Change Password'}
+            title={t('Change Password')}
             backgroundColor={colors['accent-white']}
             textColor={colors['primary-danger']}
             isHighlighted={true}
             onPressing={() => handlePasswordReset()}
           />
           <PrimaryButtonComponent
-            title={'Logout'}
+            title={t("Logout")}
             onPressing={Logout}
             backgroundColor={colors['primary-danger']}
             textColor={colors['accent-white']}
