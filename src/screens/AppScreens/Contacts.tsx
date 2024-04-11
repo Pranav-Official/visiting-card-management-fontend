@@ -212,14 +212,12 @@ const ContactsPage = () => {
       });
     }
   };
-
 const cardListPage = (id: string, name: string) => {
   navigation.navigate('CardStack', {
     screen: 'CardListScreen',
     params: { card_id: id, name: name },
   });
 }
-
   const goToSearchScreen = () => {
     navigation.navigate('SearchScreen');
   };
