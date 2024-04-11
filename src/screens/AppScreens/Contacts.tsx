@@ -212,7 +212,12 @@ const ContactsPage = () => {
       });
     }
   };
-
+const cardListPage = (id: string, name: string) => {
+  navigation.navigate('CardStack', {
+    screen: 'CardListScreen',
+    params: { card_id: id, name: name },
+  });
+}
   const goToSearchScreen = () => {
     navigation.navigate('SearchScreen');
   };
@@ -237,6 +242,7 @@ const ContactsPage = () => {
             <ContactListComponent
               contactName={item.contact_name}
               onPress={() => contactPage(item.card_id, item.contact_name)}
+              onLongPress={() => cardListPage(item.card_id, item.contact_name)}
             />
           )}
           keyExtractor={(item) => item.card_id + item.contact_name}

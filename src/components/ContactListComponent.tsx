@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import colors from '../utils/colorPallete';
 import nameToColor from '../network/nameToHex';
-type Contact = { contactName: string; onPress?: () => void };
+type Contact = { contactName: string; onPress?: () => void; onLongPress?: () => void };
 
-const ContactListComponent = ({ contactName, onPress }: Contact) => {
+const ContactListComponent = ({ contactName, onPress, onLongPress }: Contact) => {
   // Function to truncate the contact name to a maximum of 14 characters
   const truncateContactName = (name: string) => {
     if (name.length > 22) {
@@ -14,7 +14,7 @@ const ContactListComponent = ({ contactName, onPress }: Contact) => {
   };
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
       <View style={styles.container}>
         <View
           style={[styles.circle, { backgroundColor: nameToColor(contactName) }]}
