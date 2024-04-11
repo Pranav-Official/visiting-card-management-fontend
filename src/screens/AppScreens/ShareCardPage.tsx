@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  PermissionsAndroid,
+  Text,
+} from 'react-native';
 import SearchBarComponent from '../../components/SearchBarComponent';
 import ShareCardComponent from '../../components/ShareCardContactComponent';
 import { listUsers } from '../../network/getUserAPI';
@@ -9,10 +15,26 @@ import PrimaryButtonComponent from '../../components/PrimaryButtonComponent';
 import { ShareCard, ShareCardProp } from '../../network/shareCardAPI';
 import { shareExternally } from '../../network/externalShare';
 import Toast from 'react-native-root-toast';
+import Contacts from 'react-native-contacts';
+import colors from '../../utils/colorPallete';
+import ShareCardContactShimmer from '../../components/Shimmers/ShareCardContactShimmer';
+import { getProfile } from '../../network/getProfileDetailsAPI';
 
 type ShareProp = {
   user_fullname: string;
   user_id: string;
+  phone: string;
+};
+
+type PhoneNumbers = {
+  number: string;
+};
+
+type Contact = {
+  recordID: string;
+  displayName: string;
+  phoneNumbers: PhoneNumbers[];
+  // Add other properties as needed
 };
 
 const ShareCardScreen = ({
@@ -24,6 +46,39 @@ const ShareCardScreen = ({
   const [filteredShareList, setFilteredShareList] = useState<ShareProp[]>([]);
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [grantedStatus, setGrantedStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [userPhoneStatus, setUserPhoneStatus] = useState<boolean>();
+
+  const requestContactsPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+        // {
+        //   title: 'Contacts',
+        //   message: 'This app would like to view your contacts.',
+        //   buttonPositive: 'Accept',
+        //   buttonNegative: 'Cancel',
+        // },
+      );
+      console.log('Reached Here Permission', granted);
+      setGrantedStatus(granted);
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        const fetchedContacts = await Contacts.getAll();
+        console.log('Fetched contacts:', fetchedContacts);
+        setContacts(fetchedContacts);
+      } else {
+        console.log('Contacts permission denied');
+        console.log(granted);
+        setGrantedStatus(granted);
+        throw new Error('Else: Permission is denied');
+      }
+    } catch (error) {
+      console.error('Error requesting contacts permission:', error);
+      throw new Error('User did not grant Contact permission');
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,13 +86,54 @@ const ShareCardScreen = ({
         const user_id = (await getLocalItem(Constants.USER_ID)) ?? '';
         const jwt_token = (await getLocalItem(Constants.USER_JWT)) ?? '';
 
-        const result = await listUsers({ user_id, jwt_token });
-        setShareList(result.userResp);
+        const profileDetails = await getProfile(user_id, jwt_token);
+        console.log(
+          '\n\nProfile Phone details:',
+          profileDetails.userData.phone,
+          'helo',
+        );
+
+        if (
+          (profileDetails.status === true &&
+            profileDetails.userData.phone == null) ||
+          profileDetails.userData.phone == ''
+        ) {
+          setUserPhoneStatus(false);
+        } else {
+          setUserPhoneStatus(true);
+          const result = await listUsers({ user_id, jwt_token });
+          // console.log('Result is : ', result);
+          // console.log('\nContacts are: ', contacts);
+
+          await requestContactsPermission();
+
+          const fetchedContacts = await Contacts.getAll();
+          setContacts(fetchedContacts);
+
+          const matchedUsersWithNames = result.userResp
+            .filter((user) =>
+              fetchedContacts.some(
+                (contact) => contact.phoneNumbers[0].number === user.phone,
+              ),
+            )
+            .map((user) => {
+              const contact = fetchedContacts.find(
+                (contact) => contact.phoneNumbers[0].number === user.phone,
+              );
+              return {
+                ...user,
+                user_fullname: contact?.displayName ?? user.user_fullname,
+              };
+            });
+
+          setShareList(matchedUsersWithNames);
+        }
       } catch (error) {
         console.log(error);
         setShareList([]);
       }
     };
+
     fetchData();
   }, []);
 
@@ -46,6 +142,7 @@ const ShareCardScreen = ({
       item.user_fullname.toLowerCase().includes(searchQuery.toLowerCase()),
     );
     setFilteredShareList(filteredList);
+    setIsLoading(false);
   }, [searchQuery, shareList]);
 
   const handleCardPress = (user_id: string) => {
@@ -114,20 +211,49 @@ const ShareCardScreen = ({
         <SearchBarComponent value={searchQuery} setter={setSearchQuery} />
       </View>
       <View style={styles.contact_area}>
-        <FlatList
-          contentContainerStyle={styles.flatListStyle}
-          showsVerticalScrollIndicator={true}
-          data={filteredShareList}
-          renderItem={({ item }) => (
-            <ShareCardComponent
-              user_fullname={item.user_fullname}
-              user_id={item.user_id}
-              onCardPress={handleCardPress}
+        {userPhoneStatus ? (
+          grantedStatus === PermissionsAndroid.RESULTS.GRANTED ? (
+            <FlatList
+              contentContainerStyle={styles.flatListStyle}
+              showsVerticalScrollIndicator={true}
+              data={filteredShareList}
+              renderItem={({ item }) =>
+                isLoading === true ? (
+                  <ShareCardContactShimmer />
+                ) : (
+                  <ShareCardComponent
+                    user_fullname={item.user_fullname}
+                    user_id={item.user_id}
+                    onCardPress={handleCardPress}
+                  />
+                )
+              }
+              keyExtractor={(item) => item.user_id}
             />
-          )}
-          keyExtractor={(item) => item.user_id}
-        />
+          ) : (
+            <View style={styles.allowAccessContainer}>
+              <Text style={styles.allowAccessText}>
+                Allow Contacts Access for Internal Sharing
+              </Text>
+              <Text style={styles.allowAccessText}>(OR)</Text>
+              <Text style={styles.allowAccessText}>
+                Press 'Share' Button for External Sharing
+              </Text>
+            </View>
+          )
+        ) : (
+          <View style={styles.allowAccessContainer}>
+            <Text style={styles.allowAccessText}>
+              Add Your Phone Number for Internal Sharing
+            </Text>
+            <Text style={styles.allowAccessText}>(OR)</Text>
+            <Text style={styles.allowAccessText}>
+              Press 'Share' Button for External Sharing
+            </Text>
+          </View>
+        )}
       </View>
+
       <View style={styles.button_container}>
         <View style={styles.profile_button_container}>
           <PrimaryButtonComponent
@@ -152,6 +278,15 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 30,
     marginTop: 0,
+  },
+  allowAccessContainer: {
+    marginTop: '60%',
+    alignItems: 'center',
+  },
+  allowAccessText: {
+    color: colors['label-text'],
+    fontSize: 18,
+    textAlign: 'center',
   },
   flatListStyle: {
     padding: 5,

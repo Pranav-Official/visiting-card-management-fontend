@@ -16,13 +16,11 @@ type ImgContainer = {
   indexSetter: () => void;
 };
 
-const screenWidth = Dimensions.get('window').width;
-const contentWidth = screenWidth - 95;
-const contentWidth2 = screenWidth - 70;
+//const screenWidth = Dimensions.get('window').width;
 
 const CommonImage = (props: ImgContainer) => {
   return (
-    <View style={styles.CommonImagecontainer} testID="Image">
+    <View style={styles.Contentcontainer} testID="Image">
       <TouchableOpacity
         style={styles.cardContainer}
         onPress={() => {
@@ -60,7 +58,7 @@ const CommonImageComponent = ({ frontImageUri, backImageUri }: imageURI) => {
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
 
-  const itemSeparator = () => <View style={styles.separator} />;
+  // const itemSeparator = () => <View style={styles.separator} />;
   if (!frontImageUri && !backImageUri) {
     return (
       <TouchableOpacity>
@@ -88,9 +86,9 @@ const CommonImageComponent = ({ frontImageUri, backImageUri }: imageURI) => {
             />
           )}
           keyExtractor={(_, index) => index.toString()}
-          ItemSeparatorComponent={itemSeparator}
+          // ItemSeparatorComponent={itemSeparator}
           contentContainerStyle={
-            imageData.length === 1 ? styles.CommonImagecontainer2 : null
+            imageData.length === 1 ? styles.Contentcontainer2 : null
           }
         />
         <View testID="imageView">
@@ -108,39 +106,37 @@ const CommonImageComponent = ({ frontImageUri, backImageUri }: imageURI) => {
 };
 
 const styles = StyleSheet.create({
-  CommonImagecontainer: {
-    paddingLeft: 20,
-    width: contentWidth2,
+  Contentcontainer: {
+    paddingHorizontal: 10,
   },
   mainStyle: {
     backgroundColor: colors['secondary-light'],
-    // paddingLeft: 20,
     paddingTop: 20,
-    flex: 1,
-    gap: 10,
+    // flex: 1,
   },
-  CommonImagecontainer2: {
-    paddingLeft: 25,
+  Contentcontainer2: {
     width: '100%',
-  },
-  separator: {
-    width: 0,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: colors['secondary-light'],
+    borderRadius: 20,
+    height: 200,
+    shadowColor: colors['primary-text'],
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.38,
+    shadowRadius: 4.84,
   },
   cardContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignSelf: 'center',
     backgroundColor: colors['accent-white'],
     borderRadius: 20,
     height: 200,
     width: 320,
-    shadowColor: '#000',
+    shadowColor: colors['primary-text'],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.38,
     shadowRadius: 4.84,
     elevation: 5,
-  },
-  gap: {
-    height: 20,
   },
   imageContainer: {
     flex: 1,
@@ -150,21 +146,18 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: 'cover',
-    width: '100%',
   },
   singleImage: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignSelf: 'center',
     backgroundColor: colors['accent-white'],
-    marginLeft: 45,
     borderRadius: 20,
     height: 200,
-    width: contentWidth,
-    shadowColor: '#000',
+    width: '80%',
+    shadowColor: colors['primary-text'],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.38,
     shadowRadius: 4.84,
-    //elevation: 5,
   },
 });
 
