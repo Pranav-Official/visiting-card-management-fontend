@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native';
 import { addProfileDetails } from '../../network/addProfileDetailsAPI';
 import Toast from 'react-native-root-toast';
+import { validatePhoneNumber } from '../../utils/regexCheck';
 
 type RouteType = {
   route: RouteProp<
@@ -34,6 +35,15 @@ const AddProfileDetailsScreen = ({ route }: RouteType) => {
   const navigation = useNavigation();
 
   const handleSave = async () => {
+    if (!newPhone || !newJobTitle || !newCompanyName) {
+      Toast.show('Please fill all the fields');
+      return;
+    }
+    if (!validatePhoneNumber(newPhone)) {
+      Toast.show('Please enter valid phone number');
+      return;
+    }
+
     const updatedDetails = await addProfileDetails(
       userId,
       jwtToken,

@@ -16,7 +16,7 @@ const isValidWebsiteUrl = (url: string): boolean => {
 };
 
 //function for phone number validation
-function validatePhoneNumber(phoneNumber: string, country: CountryCode) {
+function validatePhoneNumber(phoneNumber: string, country?: CountryCode) {
   phoneNumber = phoneNumber.replace(/[\s()-]+/g, '');
   const internationalRegex = /^\+?[0-9](?:[0-9] ?){5,13}[0-9]$/;
   if (phoneNumber.length >= 7 && phoneNumber.length <= 15) {
