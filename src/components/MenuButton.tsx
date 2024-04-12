@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    color: colors['secondary-light'],
+    color: colors['accent-grey'],
     zIndex: 1,
   },
   modal: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   modalContent: {
-    backgroundColor: colors['secondary-light'],
+    backgroundColor: '#DFDFDF',
     padding: 10,
     borderRadius: 10,
   },

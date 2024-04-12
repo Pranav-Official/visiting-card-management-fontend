@@ -14,6 +14,7 @@ import MainLogoComponent from '../../components/MainLogoComponent';
 import BottomDialougeTouchable from '../../components/BottomDialougeTouchable';
 import colors from '../../utils/colorPallete';
 import { isValidPassword, validateEmail } from '../../utils/regexCheck';
+import { useTranslation } from 'react-i18next';
 import { SendOtp } from '../../network/sendOTPAPI';
 import { NavigationProp } from '@react-navigation/native';
 
@@ -116,7 +117,7 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
       setLoading(false);
     }
   };
-
+  const { t } = useTranslation();
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <SafeAreaView style={styles.safeAreaView}>
@@ -124,25 +125,25 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
         <View style={styles.midSection}>
           <InputComponent
             hidden={false}
-            header="Fullname"
+            header={t("Fullname")}
             value={fullname}
             setter={(val) => {
               setFullname(val);
               setNameBorder('Normal');
             }}
             borderType={fullnameBorder}
-            placeholder="Enter Full Name"
+            placeholder={t("Enter Full Name")}
           />
           <InputComponent
             hidden={false}
-            header="Email"
+            header={t("Email")}
             value={email}
             setter={setEmail}
             borderType={emailBorder}
-            placeholder="Enter Email"
+            placeholder={t("Enter Email")}
           />
           <InputComponent
-            header="Password"
+            header={t("Password")}
             hidden={true}
             value={password}
             setter={(val) => {
@@ -150,10 +151,10 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
               setPasswordBorder('Normal');
             }}
             borderType={passwordBorder}
-            placeholder="Enter Password"
+            placeholder={t("Enter Password")}
           />
           <InputComponent
-            header="Confirm Password"
+            header={t("Confirm Password")}
             hidden={true}
             value={confirmPassword}
             setter={(val) => {
@@ -161,7 +162,7 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
               setConfirmPasswordBorder('Normal');
             }}
             borderType={confirmPasswordBorder}
-            placeholder="Confirm Password"
+            placeholder={t("Confirm Password")}
           />
           {!loading ? (
             <View style={styles.buttonContainer}>
@@ -176,8 +177,8 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
           )}
         </View>
         <BottomDialougeTouchable
-          label="Already have an account?"
-          mainText="Login!"
+          label={t("Already have an account?")}
+          mainText={t("Login")+"!"}
           navigateTo="Login"
         />
       </SafeAreaView>
