@@ -6,6 +6,7 @@ import {
   TextInputKeyPressEventData,
   ToastAndroid,
   Alert,
+  Text,
 } from 'react-native';
 import PrimaryButtonComponent from '../../components/PrimaryButtonComponent';
 import MainLogoComponent from '../../components/MainLogoComponent';
@@ -15,6 +16,7 @@ import Constants from '../../utils/Constants';
 import { userLogin } from '../../store/userSlice';
 import { userDetails } from '../../store/userDetailsSlice';
 import { useDispatch } from 'react-redux';
+import colors from '../../utils/colorPallete';
 
 const OtpScreen = ({ route }: any) => {
   // Refs for each TextInput field
@@ -105,6 +107,11 @@ const OtpScreen = ({ route }: any) => {
       <View style={styles.logo}>
         <MainLogoComponent />
       </View>
+      <View>
+        <Text style={styles.otpText}>
+          An OTP was sent to your email, Please enter it here
+        </Text>
+      </View>
       <View style={styles.otp}>
         {otpValues.map((value, index) => (
           <TextInput
@@ -133,12 +140,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
     padding: 20,
     margin: 10,
   },
   logo: {
     alignItems: 'center',
+  },
+  otpText: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: colors['primary-text'],
+    marginBottom: 60,
   },
   input: {
     height: 50,
