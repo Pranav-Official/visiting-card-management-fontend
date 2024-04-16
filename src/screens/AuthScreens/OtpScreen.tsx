@@ -17,6 +17,7 @@ import { userLogin } from '../../store/userSlice';
 import { userDetails } from '../../store/userDetailsSlice';
 import { useDispatch } from 'react-redux';
 import colors from '../../utils/colorPallete';
+import { verifyOTP } from '../../network/verifyOTPAPI';
 
 const OtpScreen = ({ route }: any) => {
   // Refs for each TextInput field
@@ -70,32 +71,35 @@ const OtpScreen = ({ route }: any) => {
     const enteredOTP = otpValues.join('');
     setOTPValues(Array(6).fill(''));
     inputRefs.current[0]?.focus();
-    if (enteredOTP === route.params.receivedOtp) {
-      const response = await SignUpUser(route.params.userDetails);
-      if (response.status) {
-        setLocalItem(Constants.IS_LOGGED_IN, 'true');
-        dispatch(
-          userDetails({
-            token: response.data?.token ?? '',
-            user_id: response.data?.user_id ?? '',
-          }),
-        );
-        setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
-        setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
-        dispatch(userLogin(true));
-        dispatch(
-          userDetails({
-            token: response.data?.token ?? '',
-            user_id: response.data?.user_id ?? '',
-          }),
-        );
-      } else {
-        const message = response.message || 'Unknown error occurred';
-        ToastAndroid.showWithGravity(
-          message,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
+    if (enteredOTP) {
+      try {
+        const verificationResponse = await verifyOTP({
+          email: route.params.userDetails.signUpEmail,
+          enteredOtp: enteredOTP,
+        });
+        if (verificationResponse.statusCode === '200') {
+          const response = await SignUpUser(route.params.userDetails);
+          setLocalItem(Constants.IS_LOGGED_IN, 'true');
+          dispatch(userLogin(true));
+          dispatch(
+            userDetails({
+              token: response.data?.token ?? '',
+              user_id: response.data?.user_id ?? '',
+            }),
+          );
+          setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
+          setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
+        } else {
+          const message = verificationResponse.verificationResponse;
+          ToastAndroid.showWithGravity(
+            message.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+        }
+      } catch (error) {
+        console.log('Error while verifying OTP ', error);
+        Alert.alert('Error', 'An error occurred while verifying OTP.');
       }
     } else {
       Alert.alert('Invalid OTP');
