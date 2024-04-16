@@ -28,8 +28,6 @@ type SignUpNavigationProp = NavigationProp<
 >;
 
 const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
-  // const navigation = useNavigation();
-
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -95,18 +93,18 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
 
     try {
       const otpResponse = await SendOtp({ user_email: email });
-      const receivedOtp = otpResponse.otp?.toString();
-      navigation.navigate({
-        name: 'OtpScreen',
-        params: {
-          receivedOtp,
-          userDetails: {
-            signUpUsername: fullname,
-            signUpPassword: password,
-            signUpEmail: email,
+      if (otpResponse.statusCode === '200') {
+        navigation.navigate({
+          name: 'OtpScreen',
+          params: {
+            userDetails: {
+              signUpUsername: fullname,
+              signUpPassword: password,
+              signUpEmail: email,
+            },
           },
-        },
-      });
+        });
+      }
     } catch (error) {
       ToastAndroid.showWithGravity(
         'Error occurred during signup',
@@ -125,25 +123,25 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
         <View style={styles.midSection}>
           <InputComponent
             hidden={false}
-            header={t("Fullname")}
+            header={t('Fullname')}
             value={fullname}
             setter={(val) => {
               setFullname(val);
               setNameBorder('Normal');
             }}
             borderType={fullnameBorder}
-            placeholder={t("Enter Full Name")}
+            placeholder={t('Enter Full Name')}
           />
           <InputComponent
             hidden={false}
-            header={t("Email")}
+            header={t('Email')}
             value={email}
             setter={setEmail}
             borderType={emailBorder}
-            placeholder={t("Enter Email")}
+            placeholder={t('Enter Email')}
           />
           <InputComponent
-            header={t("Password")}
+            header={t('Password')}
             hidden={true}
             value={password}
             setter={(val) => {
@@ -151,10 +149,10 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
               setPasswordBorder('Normal');
             }}
             borderType={passwordBorder}
-            placeholder={t("Enter Password")}
+            placeholder={t('Enter Password')}
           />
           <InputComponent
-            header={t("Confirm Password")}
+            header={t('Confirm Password')}
             hidden={true}
             value={confirmPassword}
             setter={(val) => {
@@ -162,7 +160,7 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
               setConfirmPasswordBorder('Normal');
             }}
             borderType={confirmPasswordBorder}
-            placeholder={t("Confirm Password")}
+            placeholder={t('Confirm Password')}
           />
           {!loading ? (
             <View style={styles.buttonContainer}>
@@ -177,8 +175,8 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
           )}
         </View>
         <BottomDialougeTouchable
-          label={t("Already have an account?")}
-          mainText={t("Login")+"!"}
+          label={t('Already have an account?')}
+          mainText={t('Login') + '!'}
           navigateTo="Login"
         />
       </SafeAreaView>
