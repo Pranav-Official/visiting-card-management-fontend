@@ -175,7 +175,6 @@ const CardDetailPage = ({ route }: any) => {
         text: cardDetail.card_name,
         ...translationOptions,
       });
-      console.log("Trying to translate");
       const translatedJobTitle = await TranslateText.translate({
         text: cardDetail.job_title ?? '',
         ...translationOptions,
@@ -184,7 +183,6 @@ const CardDetailPage = ({ route }: any) => {
         text: cardDetail.company_name ?? '',
         ...translationOptions,
       });
-      console.log("Finished translate");
       const translatedCardDetails = {
         ...cardDetail,
         card_name: translatedCardName,
@@ -194,6 +192,7 @@ const CardDetailPage = ({ route }: any) => {
       setTranslatedCardDetails(translatedCardDetails as CardDetails);
       setShowtranslated(!showTranslated);
     } catch (error) {
+      Toast.show('Error in translation');
       console.log('Error in translation', error);
     }
   };
