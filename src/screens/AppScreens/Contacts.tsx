@@ -176,6 +176,7 @@ const ContactsPage = () => {
       });
   };
   useEffect(() => {
+    setLocalItem(Constants.USE_REPLICATE, 'false');
     try {
       getPendingCardsList();
     } catch (error) {
@@ -200,7 +201,7 @@ const ContactsPage = () => {
   const contactPage = async (id: string, name: string) => {
     const contact = contactList.find((contact) => contact.card_id === id);
 
-    if ( contact?.cardListCount === 1) {
+    if (contact?.cardListCount === 1) {
       const cardId = contact.card_id;
       navigation.navigate('CardStack', {
         screen: 'CardDetailsScreen',
@@ -213,12 +214,12 @@ const ContactsPage = () => {
       });
     }
   };
-const cardListPage = (id: string, name: string) => {
-  navigation.navigate('CardStack', {
-    screen: 'CardListScreen',
-    params: { card_id: id, name: name },
-  });
-}
+  const cardListPage = (id: string, name: string) => {
+    navigation.navigate('CardStack', {
+      screen: 'CardListScreen',
+      params: { card_id: id, name: name },
+    });
+  };
   const goToSearchScreen = () => {
     navigation.navigate('SearchScreen');
   };
@@ -226,7 +227,7 @@ const cardListPage = (id: string, name: string) => {
   return (
     <SafeAreaView style={styles.SafeAreaView}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>{t("Contacts")}</Text>
+        <Text style={styles.headerTitle}>{t('Contacts')}</Text>
       </View>
       <TouchableOpacity onPress={goToSearchScreen}>
         <SearchBarComponent editable={false} />

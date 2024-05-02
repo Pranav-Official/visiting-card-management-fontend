@@ -20,4 +20,13 @@ type ContactCard = {
   contact_name: string;
   cards: Card[];
 };
-export type { CardDetails, Card, ContactCard };
+
+type extractedDetails = {
+  fullname: string | null;
+  'job-title': string | null;
+  email: string | null;
+  website: string | null;
+  company: string | null;
+  phone: string | null;
+};
+export type { CardDetails, Card, ContactCard, extractedDetails };

@@ -21,8 +21,12 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 import { aiDetailsExtraction } from '../../network/aiDetailsExtraction';
 import colors from '../../utils/colorPallete';
+import { getLocalItem } from '../../utils/Utils';
+import Constants from '../../utils/Constants';
+import { extractedDetails } from '../../types/objectTypes';
+import regexDetailsExtraction from '../../services/regexDetailsExtraction';
 
-const CropConfirmationScreen = ({ route }) => {
+const CropConfirmationScreen = ({ route }: any) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [extractionError, setExtractionError] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -52,7 +56,13 @@ const CropConfirmationScreen = ({ route }) => {
       // const rawText =
       //   'GOLFERS PGA ASSOCIATION PGA TM AMERICA 1916 全米プロゴルフ協会 ケイシー・M・モートン 放送・新規メディアマーケティング担当部長 33418米国フロリダ州パームビーチガーデンズ市 アベニューオブザチャンピオンズ 100番地 : +1 (561 ) 624-8811 : +1 (561) 541-3342 FAX: +1 (561 ) 443-1234 Eメール: cma-pga@pgahq.com • www.pga.com';
       console.log('rawText', rawText);
-      const response = await aiDetailsExtraction(rawText);
+      let response = { status: false, data: {} as extractedDetails };
+      if ((await getLocalItem(Constants.USE_REPLICATE)) === 'true') {
+        response = await aiDetailsExtraction(rawText);
+      } else {
+        response = regexDetailsExtraction(rawText);
+      }
+
       if (response.status) {
         console.log('object received', response.data);
         const card_details = {
@@ -123,7 +133,7 @@ const CropConfirmationScreen = ({ route }) => {
     }
   };
 
-  const takeImage = async (prevImage) => {
+  const takeImage = async (prevImage: any) => {
     ImagePicker.openCamera({
       cropping: true,
       width: 3000,
@@ -141,7 +151,7 @@ const CropConfirmationScreen = ({ route }) => {
       });
   };
 
-  const chooseImage = async (prevImage) => {
+  const chooseImage = async (prevImage: any) => {
     ImagePicker.openPicker({
       cropping: true,
       width: 3000,
