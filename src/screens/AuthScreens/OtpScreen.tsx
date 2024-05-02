@@ -7,6 +7,7 @@ import {
   ToastAndroid,
   Alert,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import PrimaryButtonComponent from '../../components/PrimaryButtonComponent';
 import MainLogoComponent from '../../components/MainLogoComponent';
@@ -18,6 +19,7 @@ import { userDetails } from '../../store/userDetailsSlice';
 import { useDispatch } from 'react-redux';
 import colors from '../../utils/colorPallete';
 import { verifyOTP } from '../../network/verifyOTPAPI';
+import { SendOtp } from '../../network/sendOTPAPI';
 
 const OtpScreen = ({ route }: any) => {
   // Refs for each TextInput field
@@ -105,6 +107,22 @@ const OtpScreen = ({ route }: any) => {
       Alert.alert('Invalid OTP');
     }
   };
+  const resendOTP = async () => {
+    try {
+      const otpResponse = await SendOtp({
+        user_email: route.params.userDetails.signUpEmail,
+      });
+      if (otpResponse.statusCode === '200') {
+        console.log('Resend otp successfully');
+      }
+    } catch (error) {
+      ToastAndroid.showWithGravity(
+        'Error occurred during signup',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -136,6 +154,9 @@ const OtpScreen = ({ route }: any) => {
           handleGetOTP();
         }}
       />
+      <TouchableOpacity onPress={resendOTP}>
+        <Text style={styles.resendOtp}>Resend OTP</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -146,6 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 20,
     margin: 10,
+    gap: 10,
   },
   logo: {
     alignItems: 'center',
@@ -154,7 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     color: colors['primary-text'],
-    marginBottom: 60,
+    marginBottom: 50,
   },
   input: {
     height: 50,
@@ -168,6 +190,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: '8%',
+  },
+  resendOtp: {
+    color: colors['accent-grey'],
+    alignSelf: 'center',
+    fontSize: 20,
   },
 });
 

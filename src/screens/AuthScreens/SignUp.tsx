@@ -17,6 +17,7 @@ import { isValidPassword, validateEmail } from '../../utils/regexCheck';
 import { useTranslation } from 'react-i18next';
 import { SendOtp } from '../../network/sendOTPAPI';
 import { NavigationProp } from '@react-navigation/native';
+import { SignUpUser } from '../../network/AuthenticationAPI';
 
 type BorderTypes = 'Danger' | 'Auth' | 'Normal';
 type SignUpNavigationProp = NavigationProp<
@@ -26,7 +27,11 @@ type SignUpNavigationProp = NavigationProp<
   any,
   any
 >;
-
+type SignUpUserProp = {
+  fullname: string;
+  email: string;
+  password: string;
+};
 const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
@@ -91,7 +96,31 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
     setConfirmPasswordBorder('Normal');
     setLoading(true);
 
+    interface signUpUserProp {
+      signUpUsername: string;
+      signUpPassword: string;
+      signUpEmail: string;
+    }
+
+    const userDetails: signUpUserProp = {
+      signUpUsername: fullname,
+      signUpPassword: password,
+      signUpEmail: email,
+    };
+
     try {
+      const existingUser = await SignUpUser(userDetails);
+      if (
+        existingUser.message == 'User with same Email Id exists, Please Login!'
+      ) {
+        ToastAndroid.showWithGravity(
+          'User with same Email Id exists, Please Login!',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        setLoading(false);
+        return;
+      }
       const otpResponse = await SendOtp({ user_email: email });
       if (otpResponse.statusCode === '200') {
         navigation.navigate({
