@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {toRomaji} from 'wanakana'
 import CompanyName from '../../assets/images/organisation.svg';
 import CommonImageComponent from '../../components/CommonImageComponent';
 import CardDetailComponent from '../../components/CardDetailComponent';
@@ -170,18 +171,20 @@ const CardDetailPage = ({ route }: any) => {
       requireWifi: true,
     };
     try {
-      const translatedCardName = await TranslateText.translate({
+      const translatedCardName = !enToJp?toRomaji(cardDetail.card_name) :await TranslateText.translate({
         text: cardDetail.card_name,
         ...translationOptions,
       });
+      console.log("Trying to translate");
       const translatedJobTitle = await TranslateText.translate({
         text: cardDetail.job_title ?? '',
         ...translationOptions,
       });
-      const translatedCompanyName = await TranslateText.translate({
+      const translatedCompanyName =!enToJp?toRomaji(cardDetail.company_name):await TranslateText.translate({
         text: cardDetail.company_name ?? '',
         ...translationOptions,
       });
+      console.log("Finished translate");
       const translatedCardDetails = {
         ...cardDetail,
         card_name: translatedCardName,
