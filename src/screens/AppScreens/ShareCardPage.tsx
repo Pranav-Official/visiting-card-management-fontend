@@ -113,12 +113,16 @@ const ShareCardScreen = ({
           const matchedUsersWithNames = result.userResp
             .filter((user) =>
               fetchedContacts.some(
-                (contact) => contact.phoneNumbers[0].number === user.phone,
+                (contact) =>
+                  contact.phoneNumbers[0].number.replace(/[()\s-]/g, '') ===
+                  user.phone,
               ),
             )
             .map((user) => {
               const contact = fetchedContacts.find(
-                (contact) => contact.phoneNumbers[0].number === user.phone,
+                (contact) =>
+                  contact.phoneNumbers[0].number.replace(/[()\s-]/g, '') ===
+                  user.phone,
               );
               return {
                 ...user,

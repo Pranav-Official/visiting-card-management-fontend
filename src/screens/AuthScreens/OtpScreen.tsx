@@ -91,6 +91,11 @@ const OtpScreen = ({ route }: any) => {
           );
           setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
           setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
+          ToastAndroid.showWithGravity(
+            'OTP verified successfully',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
         } else {
           const message = verificationResponse.verificationResponse;
           ToastAndroid.showWithGravity(
