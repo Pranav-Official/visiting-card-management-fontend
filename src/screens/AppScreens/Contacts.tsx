@@ -176,7 +176,6 @@ const ContactsPage = () => {
       });
   };
   useEffect(() => {
-    setLocalItem(Constants.USE_REPLICATE, 'false');
     try {
       getPendingCardsList();
     } catch (error) {

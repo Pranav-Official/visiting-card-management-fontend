@@ -58,8 +58,24 @@ const CropConfirmationScreen = ({ route }: any) => {
       console.log('rawText', rawText);
       let response = { status: false, data: {} as extractedDetails };
       if ((await getLocalItem(Constants.USE_REPLICATE)) === 'true') {
+        Toast.show('Using Replicate AI Extraction', {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
         response = await aiDetailsExtraction(rawText);
       } else {
+        Toast.show('Using simple Regex Extraction', {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        });
         response = regexDetailsExtraction(rawText);
       }
 
