@@ -28,7 +28,7 @@
 	<key>NSContactsUsageDescription</key>
 	<string>App users your contacts</string>
 	<key>CFBundleDisplayName</key>
-	<string>visiting_cards_frontend</string>
+	<string>Card Stack</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
