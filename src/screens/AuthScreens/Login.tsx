@@ -127,7 +127,7 @@ const Login = () => {
   }, [email, password]);
   const { t } = useTranslation();
   return (
-    <SafeAreaView style={styles.safeAreaView}>
+    <View style={styles.safeAreaView}>
       <MainLogoComponent />
       <View style={styles.midSection}>
         <InputComponent
@@ -176,7 +176,7 @@ const Login = () => {
         mainText={t("Sign Up")}
         navigateTo="SignUp"
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

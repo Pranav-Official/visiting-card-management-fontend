@@ -135,7 +135,7 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
   const { t } = useTranslation();
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.safeAreaView}>
         <MainLogoComponent />
         <View style={styles.midSection}>
           <InputComponent
@@ -196,7 +196,7 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
           mainText={t('Login') + '!'}
           navigateTo="Login"
         />
-      </SafeAreaView>
+      </View>
     </ScrollView>
   );
 };
