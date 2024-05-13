@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     borderColor: colors['primary-text'],
     borderWidth: 1,
     borderRadius: 5,
-    paddingVertical: 2,
+    paddingVertical: Platform.OS === 'ios' ? 8 : 2,
     paddingStart: 10,
     marginTop: -10,
     zIndex: -1,

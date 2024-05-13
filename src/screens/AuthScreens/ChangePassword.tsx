@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, ToastAndroid, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import MainLogoComponent from '../../components/MainLogoComponent';
 import InputComponent from '../../components/InputComponent';
 import {
@@ -11,6 +11,7 @@ import TopBackButton from '../../components/BackButton';
 import { isValidPassword } from '../../utils/regexCheck';
 import colors from '../../utils/colorPallete';
 import PrimaryButtonComponent from '../../components/PrimaryButtonComponent';
+import Toast from 'react-native-root-toast';
 
 type ChangePasswordRouteProps = {
   ChangePassword: {
@@ -47,15 +48,13 @@ const ChangePassword: React.FC<Props> = ({ route }) => {
   //function to handle password change
   const handleChangePassword = async () => {
     if (!passwordMatch) {
-      ToastAndroid.show('Passwords do not match!', ToastAndroid.SHORT);
+      Toast.show('Passwords do not match!')
       setPasswordBorder('Danger');
       return;
     }
     if (!isValidPassword(newPassword)) {
-      ToastAndroid.showWithGravity(
+      Toast.show(
         'Password must be at least 8 characters with uppercase, lowercase, digit, and special character.',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
       );
       setPasswordBorder('Danger');
       return;
@@ -66,11 +65,10 @@ const ChangePassword: React.FC<Props> = ({ route }) => {
       new_password: newPassword,
       jwt_token: jwtToken,
     };
-
     try {
       const response = await changePassword(changePasswordProps);
       console.log('changepassword response', response);
-      ToastAndroid.show('Password changed successfully!', ToastAndroid.SHORT);
+      Toast.show('Password changed successfully!');
       // Clear the password fields after successful change
       setNewPassword('');
       setConfirmPassword('');
@@ -79,7 +77,7 @@ const ChangePassword: React.FC<Props> = ({ route }) => {
       }
     } catch (error) {
       console.error('Error changing password:', error);
-      ToastAndroid.show('Error changing password!', ToastAndroid.SHORT);
+      Toast.show('Error changing password!');
     }
   };
 

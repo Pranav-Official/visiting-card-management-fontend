@@ -4,21 +4,14 @@ import {
   ActivityIndicator,
   SafeAreaView,
   StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
   View,
 } from 'react-native';
-
 import PrimaryButtonComponent from '../../components/PrimaryButtonComponent';
 import InputComponent from '../../components/InputComponent';
 import MainLogoComponent from '../../components/MainLogoComponent';
 import BottomDialougeTouchable from '../../components/BottomDialougeTouchable';
-
-import api from '../../network/API';
 import { loginUser } from '../../network/AuthenticationAPI';
-import { useNavigation } from '@react-navigation/native';
-import { getLocalItem, setLocalItem } from '../../utils/Utils';
+import { setLocalItem } from '../../utils/Utils';
 import Constants from '../../utils/Constants';
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../../store/userSlice';
@@ -26,6 +19,7 @@ import { userDetails } from '../../store/userDetailsSlice';
 import colors from '../../utils/colorPallete';
 import { validateEmail } from '../../utils/regexCheck';
 import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-root-toast';
 
 type response = {
   status: boolean;
@@ -49,19 +43,15 @@ const Login = () => {
 
   const LoginMain = async () => {
     if (email === '' || password === '') {
-      ToastAndroid.showWithGravity(
-        'Please enter email and password',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Please enter email and password'
       );
       setEmailBorder('Danger');
       setPasswordBorder('Danger');
       return;
     } else if (validateEmail(email) === false) {
-      ToastAndroid.showWithGravity(
-        'Please enter valid email',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Please enter valid email'
       );
       setEmailBorder('Danger');
       setLoading(false);
@@ -82,10 +72,8 @@ const Login = () => {
           setPasswordBorder('Danger');
           setLoading(false);
           const message = 'Error while logging in: ' + response.message;
-          ToastAndroid.showWithGravity(
-            message,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
+          Toast.show(
+            message
           );
         }
         if (response.status) {
@@ -108,10 +96,8 @@ const Login = () => {
           );
         } else if (response.status === false) {
           const message = response.message;
-          ToastAndroid.showWithGravity(
-            message,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
+          Toast.show(
+            message
           );
           setEmailBorder('Danger');
           setPasswordBorder('Danger');
@@ -119,10 +105,8 @@ const Login = () => {
         }
       } catch (error) {
         const message = 'Error while logging in: Network error';
-        ToastAndroid.showWithGravity(
-          message,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
+        Toast.show(
+          message
         );
         setEmailBorder('Danger');
         setPasswordBorder('Danger');

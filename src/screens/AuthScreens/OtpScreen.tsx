@@ -4,7 +4,6 @@ import {
   TextInput,
   StyleSheet,
   TextInputKeyPressEventData,
-  ToastAndroid,
   Alert,
   Text,
   TouchableOpacity,
@@ -20,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import colors from '../../utils/colorPallete';
 import { verifyOTP } from '../../network/verifyOTPAPI';
 import { SendOtp } from '../../network/sendOTPAPI';
+import Toast from 'react-native-root-toast';
 
 const OtpScreen = ({ route }: any) => {
   // Refs for each TextInput field
@@ -91,17 +91,13 @@ const OtpScreen = ({ route }: any) => {
           );
           setLocalItem(Constants.USER_JWT, response.data?.token ?? '');
           setLocalItem(Constants.USER_ID, response.data?.user_id ?? '');
-          ToastAndroid.showWithGravity(
-            'OTP verified successfully',
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
+          Toast.show(
+            'OTP verified successfully'
           );
         } else {
           const message = verificationResponse.verificationResponse;
-          ToastAndroid.showWithGravity(
-            message.message,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
+          Toast.show(
+            message.message
           );
         }
       } catch (error) {
@@ -121,10 +117,8 @@ const OtpScreen = ({ route }: any) => {
         console.log('Resend otp successfully');
       }
     } catch (error) {
-      ToastAndroid.showWithGravity(
-        'Error occurred during signup',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Error occurred during signup'
       );
     }
   };

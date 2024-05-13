@@ -27,6 +27,7 @@ import SimilarCardsComponent from '../../components/SimilarCardsComponent';
 import { getSimilarCards } from '../../network/getSimilarCardsAPI';
 import { validateEmail, validatePhoneNumber } from '../../utils/regexCheck';
 import Toast from 'react-native-root-toast';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 type Card = {
   card_id: string;
@@ -254,7 +255,12 @@ const EditCardDetails = ({ route }: any) => {
           navigation.goBack();
         }}
       >
-        <BackButtonIcon width={30} height={30} rotation={180} />
+        <MaterialIcons
+            name="arrow-back"
+            color={'black'}
+            size={34}
+
+          />
       </TouchableOpacity>
       <View style={styles.imageContainer}>
         <CommonImageComponent

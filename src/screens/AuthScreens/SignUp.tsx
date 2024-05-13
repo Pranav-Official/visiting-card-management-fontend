@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  ToastAndroid,
   View,
 } from 'react-native';
 
@@ -18,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { SendOtp } from '../../network/sendOTPAPI';
 import { NavigationProp } from '@react-navigation/native';
 import { SignUpUser } from '../../network/AuthenticationAPI';
+import Toast from 'react-native-root-toast';
 
 type BorderTypes = 'Danger' | 'Auth' | 'Normal';
 type SignUpNavigationProp = NavigationProp<
@@ -55,38 +55,30 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
       if (password === '') setPasswordBorder('Danger');
       if (fullname === '') setNameBorder('Danger');
       if (confirmPassword === '') setConfirmPasswordBorder('Danger');
-      ToastAndroid.showWithGravity(
-        'Please enter all fields',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Please enter all fields'
       );
       return;
     }
     if (!validateEmail(email)) {
       setEmailBorder('Danger');
-      ToastAndroid.showWithGravity(
-        'Please enter a valid email',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Please enter a valid email'
       );
       return;
     }
     if (!isValidPassword(password)) {
       setPasswordBorder('Danger');
-      ToastAndroid.showWithGravity(
-        'Password must be at least 8 characters with uppercase, lowercase, digit, and special character.',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Password must be at least 8 characters with uppercase, lowercase, digit, and special character.'
       );
       return;
     }
     if (password !== confirmPassword) {
       setPasswordBorder('Danger');
       setConfirmPasswordBorder('Danger');
-      ToastAndroid.showWithGravity(
-        'Passwords do not match',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Passwords do not match'
       );
       return;
     }
@@ -113,10 +105,8 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
       if (
         existingUser.message == 'User with same Email Id exists, Please Login!'
       ) {
-        ToastAndroid.showWithGravity(
-          'User with same Email Id exists, Please Login!',
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
+        Toast.show(
+          'User with same Email Id exists, Please Login!'
         );
         setLoading(false);
         return;
@@ -135,10 +125,8 @@ const SignUp = ({ navigation }: { navigation: SignUpNavigationProp }) => {
         });
       }
     } catch (error) {
-      ToastAndroid.showWithGravity(
-        'Error occurred during signup',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
+      Toast.show(
+        'Error occurred during signup'
       );
     } finally {
       setLoading(false);
