@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Modal,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import PrimaryButtonComponent from '../../components/PrimaryButtonComponent';
 import TextRecognition, {
@@ -126,25 +127,50 @@ const CropConfirmationScreen = ({ route }: any) => {
   };
 
   const extractData = async () => {
-    if (prevImageData != undefined) {
-      const firstSideData = await TextRecognition.recognize(
-        prevImageData.path,
-        TextRecognitionScript.JAPANESE,
-      );
-      const secondSideData = await TextRecognition.recognize(
-        imageData.path,
-        TextRecognitionScript.JAPANESE,
-      );
-      const ocrText = firstSideData.text + secondSideData.text;
-      Predict(ocrText, prevImageData.path, imageData.path);
-    } else {
-      const firstSideData = await TextRecognition.recognize(
-        imageData.path,
-        TextRecognitionScript.JAPANESE,
-      );
-      const ocrText = firstSideData.text;
-      Predict(ocrText, imageData.path);
+    if(Platform.OS=="ios"){
+      console.log("Inside ios ",imageData.sourceURL,prevImageData,prevImageData?.sourceURL)
+      if (prevImageData != undefined) {
+        const firstSideData = await TextRecognition.recognize(
+          prevImageData.sourceURL,
+          TextRecognitionScript.JAPANESE,
+        );
+        const secondSideData = await TextRecognition.recognize(
+          imageData.sourceURL,
+          TextRecognitionScript.JAPANESE,
+        );
+        const ocrText = firstSideData.text + secondSideData.text;
+        Predict(ocrText, prevImageData.path, imageData.path);
+      } else {
+        const firstSideData = await TextRecognition.recognize(
+          imageData.sourceURL,
+          TextRecognitionScript.JAPANESE,
+        );
+        const ocrText = firstSideData.text;
+        Predict(ocrText, imageData.path);
+      }
+    }else{
+      if (prevImageData != undefined) {
+        const firstSideData = await TextRecognition.recognize(
+          prevImageData.path,
+          TextRecognitionScript.JAPANESE,
+        );
+        const secondSideData = await TextRecognition.recognize(
+          imageData.path,
+          TextRecognitionScript.JAPANESE,
+        );
+        const ocrText = firstSideData.text + secondSideData.text;
+        Predict(ocrText, prevImageData.path, imageData.path);
+      } else {
+        const firstSideData = await TextRecognition.recognize(
+          imageData.path,
+          TextRecognitionScript.JAPANESE,
+        );
+        const ocrText = firstSideData.text;
+        Predict(ocrText, imageData.path);
+      }
     }
+
+
   };
 
   const takeImage = async (prevImage: any) => {

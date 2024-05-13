@@ -240,8 +240,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonContainer: {
-    position: 'absolute',
-    marginTop: 400,
+    // position: 'absolute',
+    // marginTop: 400,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: 10,

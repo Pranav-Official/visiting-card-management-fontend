@@ -224,7 +224,8 @@ const ContactsPage = () => {
   };
 
   return (
-    <SafeAreaView style={styles.SafeAreaView}>
+    <SafeAreaView>
+      <View style={styles.SafeAreaView}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>{t('Contacts')}</Text>
       </View>
@@ -350,6 +351,7 @@ const ContactsPage = () => {
           </View>
         </View>
       </BottomSheetComponent>
+      </View>
     </SafeAreaView>
   );
 };

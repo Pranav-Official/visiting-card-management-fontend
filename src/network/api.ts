@@ -18,5 +18,6 @@ api.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+console.log('IP Addr',process.env.BASE_URL)
 
 export default api;

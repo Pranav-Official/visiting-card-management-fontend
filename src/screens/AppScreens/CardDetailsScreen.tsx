@@ -208,7 +208,7 @@ const CardDetailPage = ({ route }: any) => {
             navigation.goBack();
           }}
         >
-          <BackButtonIcon width={30} height={30} rotation={180} />
+          <BackButtonIcon width={30} height={30} />
         </TouchableOpacity>
 
         <View style={styles.imageContainer}>
