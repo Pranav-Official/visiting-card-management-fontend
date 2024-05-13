@@ -13,6 +13,7 @@ import Constants from '../../utils/Constants';
 import { getPendingCards } from '../../network/getPendingCardsAPI';
 import { setCards } from '../../store/pendingCardsSlice';
 import { useDispatch } from 'react-redux';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Card = {
   card_id: string;
@@ -82,7 +83,7 @@ const ViewSharedContactsScreen = ({ route }: RouteType) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
       <View style={styles.headerContainer}>
         <TopBackButton color="black" />
         <Text style={styles.heading}>Shared Contacts</Text>
@@ -99,7 +100,7 @@ const ViewSharedContactsScreen = ({ route }: RouteType) => {
           onPressing={() => handlePendingPress()}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

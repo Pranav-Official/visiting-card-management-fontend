@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
   },
   modal: {
     position: 'absolute',
-    top: 10,
-    left: 190,
+    top: '10%',
+    left: '60%',
     right: 5,
     justifyContent: 'center',
     alignItems: 'center',

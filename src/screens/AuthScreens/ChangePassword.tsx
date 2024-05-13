@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import MainLogoComponent from '../../components/MainLogoComponent';
 import InputComponent from '../../components/InputComponent';
 import {
@@ -82,6 +82,7 @@ const ChangePassword: React.FC<Props> = ({ route }) => {
   };
 
   return (
+    <SafeAreaView>
     <ScrollView
       keyboardShouldPersistTaps="handled"
       style={styles.main_container}
@@ -120,6 +121,7 @@ const ChangePassword: React.FC<Props> = ({ route }) => {
         ></PrimaryButtonComponent>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -245,6 +246,7 @@ const EditCardDetails = ({ route }: any) => {
   };
 
   return (
+    <SafeAreaView>
     <ScrollView
       keyboardShouldPersistTaps="handled"
       style={styles.editContainer}
@@ -296,6 +298,7 @@ const EditCardDetails = ({ route }: any) => {
               />
             </View>
           </View>
+          
         )}
         <View style={styles.iconField}>
           <View style={styles.icon}>
@@ -399,6 +402,7 @@ const EditCardDetails = ({ route }: any) => {
         />
       </BottomSheetComponent>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

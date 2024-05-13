@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import {
   Image,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -126,6 +127,7 @@ const ProfileScreen = () => {
   };
   const { t } = useTranslation();
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <ScrollView
       keyboardShouldPersistTaps="handled"
       style={styles.profileMainContainer}
@@ -254,6 +256,7 @@ const ProfileScreen = () => {
         </View>
       </View>
     </ScrollView>
+   </SafeAreaView>
   );
 };
 

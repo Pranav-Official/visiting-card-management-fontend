@@ -15,6 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Constants from '../../utils/Constants';
 import TopBackButton from '../../components/BackButton';
 import { useFocusEffect } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SettingsScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -97,7 +98,8 @@ const SettingsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={{ position: 'absolute', left: 0, top: 20 }}>
           <TopBackButton />
@@ -148,7 +150,8 @@ const SettingsScreen = () => {
       >
         <View style={styles.modalContainer}>{ModalContent(modalContent)}</View>
       </Modal>
-    </View>
+    </SafeAreaView>
+  
   );
 };
 

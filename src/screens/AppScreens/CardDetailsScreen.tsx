@@ -4,6 +4,8 @@ import {
   Alert,
   Linking,
   Modal,
+  Platform,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -153,6 +155,8 @@ const CardDetailPage = ({ route }: any) => {
     }
   };
   const handleTranslate = async () => {
+    if(Platform.OS=='android'){
+
     let enToJp = true;
 
     const lang = await IdentifyLanguages.identify(
@@ -196,8 +200,13 @@ const CardDetailPage = ({ route }: any) => {
       Toast.show('Error in translation');
       console.log('Error in translation', error);
     }
+    }
+    else{
+      Toast.show("Translation is currently not suported in ios");
+    }
   };
   return (
+    <SafeAreaView>
     <ScrollView
       keyboardShouldPersistTaps="handled"
       style={{ backgroundColor: colors['secondary-light'] }}
@@ -455,6 +464,7 @@ const CardDetailPage = ({ route }: any) => {
         </View>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

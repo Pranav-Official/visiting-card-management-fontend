@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   FlatList,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -72,6 +73,7 @@ const RenderItem = ({ item, selected, setter }: renderItemType) => {
   };
 
   return (
+    <SafeAreaView>
     <View
       style={[
         styles.similarCardsContainer,
@@ -104,6 +106,7 @@ const RenderItem = ({ item, selected, setter }: renderItemType) => {
         </View>
       ))}
     </View>
+    </SafeAreaView>
   );
 };
 
