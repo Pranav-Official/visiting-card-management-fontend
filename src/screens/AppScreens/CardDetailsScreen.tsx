@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {toRomaji} from 'wanakana'
+import { toRomaji } from 'wanakana'
 import CompanyName from '../../assets/images/organisation.svg';
 import CommonImageComponent from '../../components/CommonImageComponent';
 import CardDetailComponent from '../../components/CardDetailComponent';
@@ -42,6 +42,7 @@ import TranslateText, {
 import IdentifyLanguages from '@react-native-ml-kit/identify-languages';
 import { CardDetails } from '../../types/objectTypes';
 import { RootStackParamList } from '../../types/navigationTypes';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const CardDetailPage = ({ route }: any) => {
   const [cardDetail, setCardDetail] = useState<CardDetails>({ card_name: '' });
@@ -171,7 +172,7 @@ const CardDetailPage = ({ route }: any) => {
       requireWifi: true,
     };
     try {
-      const translatedCardName = !enToJp?toRomaji(cardDetail.card_name) :await TranslateText.translate({
+      const translatedCardName = !enToJp ? toRomaji(cardDetail.card_name) : await TranslateText.translate({
         text: cardDetail.card_name,
         ...translationOptions,
       });
@@ -179,7 +180,7 @@ const CardDetailPage = ({ route }: any) => {
         text: cardDetail.job_title ?? '',
         ...translationOptions,
       });
-      const translatedCompanyName =!enToJp?toRomaji(cardDetail.company_name):await TranslateText.translate({
+      const translatedCompanyName = !enToJp ? toRomaji(cardDetail.company_name) : await TranslateText.translate({
         text: cardDetail.company_name ?? '',
         ...translationOptions,
       });
@@ -208,7 +209,12 @@ const CardDetailPage = ({ route }: any) => {
             navigation.goBack();
           }}
         >
-          <BackButtonIcon width={30} height={30} />
+          <MaterialIcons
+            name="arrow-back"
+            color={'black'}
+            size={34}
+
+          />
         </TouchableOpacity>
 
         <View style={styles.imageContainer}>
@@ -249,8 +255,8 @@ const CardDetailPage = ({ route }: any) => {
                 {showTranslated
                   ? translatedCardDetails.job_title
                   : cardDetail.job_title
-                  ? cardDetail.job_title
-                  : 'Add Job title'}
+                    ? cardDetail.job_title
+                    : 'Add Job title'}
               </Text>
             </>
           )}
@@ -287,8 +293,8 @@ const CardDetailPage = ({ route }: any) => {
               showTranslated
                 ? translatedCardDetails.company_name || 'Add Company Name'
                 : cardDetail.company_name
-                ? cardDetail.company_name
-                : 'Add Company Name'
+                  ? cardDetail.company_name
+                  : 'Add Company Name'
             }
             onPress={() => {
               // Navigate to the edit screen if company name is missing

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   PermissionsAndroid,
   Text,
+  Platform,
 } from 'react-native';
 import SearchBarComponent from '../../components/SearchBarComponent';
 import ShareCardComponent from '../../components/ShareCardContactComponent';
@@ -53,27 +54,42 @@ const ShareCardScreen = ({
 
   const requestContactsPermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-        // {
-        //   title: 'Contacts',
-        //   message: 'This app would like to view your contacts.',
-        //   buttonPositive: 'Accept',
-        //   buttonNegative: 'Cancel',
-        // },
-      );
-      console.log('Reached Here Permission', granted);
-      setGrantedStatus(granted);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        const fetchedContacts = await Contacts.getAll();
-        console.log('Fetched contacts:', fetchedContacts);
-        setContacts(fetchedContacts);
-      } else {
-        console.log('Contacts permission denied');
-        console.log(granted);
+      if (Platform.OS == 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+        );
+        console.log('Reached Here Permission', granted);
         setGrantedStatus(granted);
-        throw new Error('Else: Permission is denied');
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          const fetchedContacts = await Contacts.getAll();
+          console.log('Fetched contacts:', fetchedContacts);
+          setContacts(fetchedContacts);
+        } else {
+          console.log('Contacts permission denied');
+          console.log(granted);
+          setGrantedStatus(granted);
+          throw new Error('Else: Permission is denied');
+        }
+      } if (Platform.OS == 'ios') {
+        Contacts.checkPermission().then(async (permission) => {
+          // Contacts.PERMISSION_AUTHORIZED || Contacts.PERMISSION_UNDEFINED || Contacts.PERMISSION_DENIED
+          if (permission === 'undefined') {
+            Contacts.requestPermission().then(async (permission) => {
+            })
+          }
+          if (permission === 'authorized') {
+            const fetchedContacts = await Contacts.getAll();
+            console.log('Fetched contacts:', fetchedContacts);
+            setContacts(fetchedContacts);
+          }
+          if (permission === 'denied') {
+            console.log('Contacts permission denied');
+            setGrantedStatus("false");
+            throw new Error('Else: Permission is denied');
+          }
+        })
       }
+
     } catch (error) {
       console.error('Error requesting contacts permission:', error);
       throw new Error('User did not grant Contact permission');

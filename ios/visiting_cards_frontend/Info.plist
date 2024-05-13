@@ -25,6 +25,8 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Please allow gallery access</string>
+	<key>NSContactsUsageDescription</key>
+	<string>App users your contacts</string>
 	<key>CFBundleDisplayName</key>
 	<string>visiting_cards_frontend</string>
 	<key>CFBundleExecutable</key>
