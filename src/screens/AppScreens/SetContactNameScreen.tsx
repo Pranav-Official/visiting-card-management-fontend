@@ -131,7 +131,6 @@ const SetContactNameScreen = ({ route }: any) => {
   };
 
   return (
-    <SafeAreaView>
     <View style={styles.mainContainer}>
       {/* <Text style={styles.headerText}>Current Card</Text> */}
       <View style={styles.newCardContainer}>
@@ -188,7 +187,6 @@ const SetContactNameScreen = ({ route }: any) => {
         </View>
       </View>
     </View>
-    </SafeAreaView>
   );
 };
 
